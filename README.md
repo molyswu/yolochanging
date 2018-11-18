@@ -1,7 +1,7 @@
 # Install
-- cd pascalvoc  
+- cd pascalvoc/  
 - pip install requirement.txt  
-- bash download.sh  
+- bash download.sh  to download dataset(less than 500 MB)
 
 # Running  
 - Change the parameters in yolo_tensorflow/yolo/config.py  
