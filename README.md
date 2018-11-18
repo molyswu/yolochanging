@@ -23,3 +23,7 @@ set different visible gpu to each one. There could be a problem that some can al
 It should be solved by adding in the code
 
 increase the batch size and queue size. watch the profiler json so that gpu is fully used and cpu do not be idle for too long time
+
+# Notice
+nvidia-smi and cpu log will start during running, and will be killed with Ctrl+C or the training end itself.  
+If the training end because of lack of memory. nvidia-smi has to be killed manually
