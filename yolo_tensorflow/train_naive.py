@@ -3,7 +3,7 @@ import argparse
 import datetime
 import tensorflow as tf
 import yolo.config as cfg
-from yolo.yolo_net_naive import YOLONet
+from yolo.yolo_net_naive as yolo
 from utils.pascal_voc_naive import pascal_voc
 from utils.timer import Timer
 

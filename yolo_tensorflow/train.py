@@ -25,13 +25,18 @@ def main():
     ps_size = len(ps_hosts)
     workers_size = len(worker_hosts)
 
-    disfpsgpu_dir="DisPipe_"+str(workers_size)+"workers"+str(ps_size)+"ps"+"_train_logs"
+    dispipe_dir="DisPipe_"+str(workers_size)+"workers"+str(ps_size)+"ps"+"_train_logs"
+    if not os.path.exists(dispipe_dir):
+        os.makedirs(dispipe_dir)
 
-    if not os.path.exists(disfpsgpu_dir):
-        os.makedirs(disfpsgpu_dir)
+    inside_bsnQnM_dir = "Dis_Pipe_"+cfg.BS_NT_MUL_PREFIX
+    logrootpath = os.path.join(dispipe_dir, inside_bsnQnM_dir)
+    if not os.path.exists(logrootpath):
+        os.makedirs(logrootpath)
+
    
     fpslog_name = "DisPipe_" +"task"+str(FLAGS.task_index) +cfg.BS_NT_MUL_PREFIX+ "_fpslog.txt"
-    concated_path = disfpsgpu_dir + "/" + fpslog_name
+    concated_path = logrootpath + "/" + fpslog_name
 
     checkpoint_dir = FLAGS.checkpoint_dir
     if not os.path.exists(checkpoint_dir):
@@ -109,9 +114,9 @@ def main():
     ################################################################################
 
     #############################loghook############################################
-    profiler_hook = tf.train.ProfilerHook(save_secs=360, output_dir=disfpsgpu_dir, show_memory=True,show_dataflow=True)
+    profiler_hook = tf.train.ProfilerHook(save_secs=360, output_dir=logrootpath, show_memory=True,show_dataflow=True)
     summary_op = tf.summary.merge_all()
-    summary_hook = tf.train.SummarySaverHook(save_secs=120, output_dir=disfpsgpu_dir, summary_op=summary_op)
+    summary_hook = tf.train.SummarySaverHook(save_secs=120, output_dir=logrootpath, summary_op=summary_op)
 
     if FLAGS.debug == True:
         tensors_to_log = [global_step, yolo.total_loss]
