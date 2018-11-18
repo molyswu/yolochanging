@@ -1,0 +1,30 @@
+[push]
+        default = simple
+[alias]
+        co = checkout
+        ci = commit
+        st = status
+        br = branch
+        dc = diff --cached
+        pom = push origin master
+        tree = log --graph --all --decorate --oneline
+[merge]
+        tool = vimdiff
+[core]
+        autocrlf = input
+        editor = vim
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        interactive = auto
+        ui = true
+        pager = true
+[diff]
+        guitool = kdiff3
+[difftool "kdiff3"]
+        path = /usr/bin/kdiff3
+
+[user]
+  email = daisylee.ldq@gmail.com
+  name = daisyleedq

@@ -13,9 +13,10 @@ WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
 
 BATCH_SIZE = 28
 
-NUM_ENQUEUE_THREADS = 1
+NUM_ENQUEUE_THREADS = 2
 
 MUL_QUEUE_BATCH = 2
+
 #############################################################################
 
 

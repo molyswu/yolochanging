@@ -1,0 +1,7 @@
+!.gitignore
+bk/
+yolo_tensorflow/Single_Pipe_train_logs/*
+!yolo_tensoflow/Single_Pipe_train_logs/*/*.json
+yolo_tensorflow/checkpoint_dir/
+yolo_tensorflow/utils/__pycache__/
+yolo_tensorflow/yolo/__pycache__/
