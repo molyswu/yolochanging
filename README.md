@@ -27,3 +27,7 @@ increase the batch size and queue size. watch the profiler json so that gpu is f
 # Notice
 nvidia-smi and cpu log will start during running, and will be killed with Ctrl+C or the training end itself.  
 If the training end because of lack of memory. nvidia-smi has to be killed manually
+
+# Part of benchmarks best parameter settings
+Pacalvoc must be downloaded otherwise the loss will drop very fast. it just feed 0.  
+queue_size seems can not be too big. I set queuesize to 2 and get bad
