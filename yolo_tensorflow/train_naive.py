@@ -1,4 +1,4 @@
-import os
+mport os
 import argparse
 import datetime
 import tensorflow as tf

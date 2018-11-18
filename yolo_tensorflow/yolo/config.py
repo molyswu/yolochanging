@@ -11,21 +11,21 @@ PS_HOSTS  = '172.20.83.210:8897'
 
 WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
 
-BATCH_SIZE = 30
+BATCH_SIZE = 28
 
 NUM_ENQUEUE_THREADS = 1
 
-MUL_QUEUE_BATCH = 1.3
+MUL_QUEUE_BATCH = 2
 #############################################################################
 
 
 
-BS_NT_MUL_PREFIX = "_bs"+str(BATCH_SIZE)+"nt"+str(NUM_ENQUEUE_THREADS)+"mul"+str(MUL_QUEUE_BATCH)
+BS_NT_MUL_PREFIX = "_bs"+str(BATCH_SIZE)+"nt"+str(NUM_ENQUEUE_THREADS)+"mul"+str(MUL_QUEUE_BATCH)+"_"
 
 __file__= os.getcwd()
 DATA_PATH = Path(__file__).parents[0]
 #DATA_PATH = str(p)
-
+print("+++++++++++++++++++++++++++++++++++++DATA_PATH"+str(DATA_PATH)+"+++++++++++++++++++++++++++++++++++++++++++++++")
 PASCAL_PATH = os.path.join(DATA_PATH, 'pascal_voc')
 
 CACHE_PATH = os.path.join(PASCAL_PATH, 'cache')
