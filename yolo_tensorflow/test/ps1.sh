@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=  python3 ps1.py
