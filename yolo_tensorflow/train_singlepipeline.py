@@ -19,7 +19,8 @@ def main():
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--task_index',default=0, type=int)
     
-    profsum_save_step = 60 
+    prof_save_step = cfg.PROFILER_SAVE_STEP #120
+    sum_save_step = cfg.SUMMARY_SAVE_STEP #500
     FLAGS, unparsed = parser.parse_known_args()
     
     initial_learning_rate = cfg.LEARNING_RATE
@@ -108,10 +109,10 @@ def main():
         
     #########################hook#####################################
     
-    profiler_hook = tf.train.ProfilerHook(save_steps=profsum_save_step, output_dir=logrootpath, show_memory=True,show_dataflow=True)
+    profiler_hook = tf.train.ProfilerHook(save_steps=prof_save_step, output_dir=logrootpath, show_memory=True,show_dataflow=True)
 
     summary_op = tf.summary.merge_all()
-    summary_hook = tf.train.SummarySaverHook(save_steps=profsum_save_step, output_dir=logrootpath, summary_op=summary_op)
+    summary_hook = tf.train.SummarySaverHook(save_steps=sum_save_step, output_dir=logrootpath, summary_op=summary_op)
     
     if FLAGS.debug == True:
         tensors_to_log = [global_step, yolo.total_loss]

@@ -11,17 +11,21 @@ PS_HOSTS  = '172.20.83.210:8897'
 
 WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
 
-BATCH_SIZE = 28
+BATCH_SIZE = 22
 
 NUM_ENQUEUE_THREADS = 2
 
-MUL_QUEUE_BATCH = 2
+MUL_QUEUE_BATCH = 1.3
+
+PROFILER_SAVE_STEP = 120
+
+SUMMARY_SAVE_STEP = 150
 
 #############################################################################
 
 
 
-BS_NT_MUL_PREFIX = "_bs"+str(BATCH_SIZE)+"nt"+str(NUM_ENQUEUE_THREADS)+"mul"+str(MUL_QUEUE_BATCH)+"_"
+BS_NT_MUL_PREFIX = "_bs"+str(BATCH_SIZE)+"nt"+str(NUM_ENQUEUE_THREADS)+"mul"+str(MUL_QUEUE_BATCH)+"s"
 
 __file__= os.getcwd()
 DATA_PATH = Path(__file__).parents[0]

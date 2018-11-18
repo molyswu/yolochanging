@@ -17,6 +17,8 @@ def main():
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--watch_gpu',required=True ,type=int, help="watch gpu id filled Set it the same as visible gpu id")
     
+    profiler_save_steps = cfg.PROFILER_SAVE_STEP
+    summary_save_steps = cfg.SUMMARY_SAVE_STEP
     FLAGS, unparsed = parser.parse_known_args()
     
     ps_hosts = cfg.PS_HOSTS.split(",")
@@ -114,9 +116,9 @@ def main():
     ################################################################################
 
     #############################loghook############################################
-    profiler_hook = tf.train.ProfilerHook(save_secs=360, output_dir=logrootpath, show_memory=True,show_dataflow=True)
+    profiler_hook = tf.train.ProfilerHook(save_steps=profiler_save_steps, output_dir=logrootpath, show_memory=True,show_dataflow=True)
     summary_op = tf.summary.merge_all()
-    summary_hook = tf.train.SummarySaverHook(save_secs=120, output_dir=logrootpath, summary_op=summary_op)
+    summary_hook = tf.train.SummarySaverHook(save_steps=summary_save_steps, output_dir=logrootpath, summary_op=summary_op)
 
     if FLAGS.debug == True:
         tensors_to_log = [global_step, yolo.total_loss]
