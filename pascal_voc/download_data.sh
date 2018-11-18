@@ -8,6 +8,7 @@ wget http://pjreddie.com/media/files/VOCtrainval_06-Nov-2007.tar
 echo "Extracting VOC data..."
 tar xf VOCtrainval_06-Nov-2007.tar
 
-#mv VOCdevkit pascal_voc/.
+echo "Remove the tat file"
+rm VOCtrainval_06-Nov-2007.tar
 
 echo "Done."
