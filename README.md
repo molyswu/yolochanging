@@ -3,10 +3,10 @@
 - pip install requirement.txt  
 - bash download.sh  to download dataset(less than 500 MB)
 
-# Running  
+# Befoer Running  
 - Change the parameters in yolo_tensorflow/yolo/config.py  
-- change hosts to start.
-- change batchsize,NUMENEUQUETHREADS, MulOfQueuesizeToBatchsize to reach 100% of GPU utilisation and cpu utisage
+- change hosts and workers to start.
+- change BATCH_SIZE,NUM_ENQUEUE_THREADS, MUL_QUEUE_BATCH(how many times is the queue size is based on batch_size, eg. 2 means double the size of batchsize as the size of inputqueue ) and PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP to reach 100% of GPU utilisation and cpu utisage.
 
 # Naive version feed input:  
 run base_run.sh
