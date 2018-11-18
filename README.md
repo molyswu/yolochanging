@@ -1,13 +1,21 @@
-# yolochanging
+# Install
+- cd pascalvoc  
+- pip install requirement.txt  
+- bash download.sh  
 
+# Running  
+- Change the parameters in yolo_tensorflow/yolo/config.py  
+- change hosts to start.
+- change batchsize,NUMENEUQUETHREADS, MulOfQueuesizeToBatchsize to reach 100% of GPU utilisation and cpu utisage
 
-#Naive version:
+# Naive version feed input:  
 run base_run.sh
 
-#single machine training
+# Single machine training with pipeline  
 run single_run.sh, please write the --watch-gpu the same as the visible gpu
 
-#distributed training with pipeline
+
+# Distributed training  
 run ps.sh
 run worker0.sh --watch-gpu=0
 run worker1.sh  --watch-gpu=1
