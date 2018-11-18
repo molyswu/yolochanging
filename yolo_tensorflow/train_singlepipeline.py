@@ -28,11 +28,17 @@ def main():
     staircase = cfg.STAIRCASE
     
     ########################dir#######################################
-    sinfpsgpu_dir = "Single_Pipe_train_logs"
-    if not os.path.exists(sinfpsgpu_dir):
-        os.makedirs(sinfpsgpu_dir)
+    singlepipe_dir = "Single_Pipe_train_logs"
+    if not os.path.exists(singlepipe_dir):
+        os.makedirs(singlepipe_dir)
+    
+    inside_bsnQnM_dir = "Single_Pipe"+cfg.BS_NT_MUL_PREFIX
+    logrootpath = os.path.join(singlepipe_dir, inside_bsnQnM_dir)
+    if not os.path.exists(logrootpath):
+        os.makedirs(logrootpath)
+    
     fpslog_name = "Single_Pipe"+cfg.BS_NT_MUL_PREFIX+ "fps_log.txt"
-    concated_path = sinfpsgpu_dir + "/" + fpslog_name
+    concated_path = logrootpath + "/" + fpslog_name
 
     checkpoint_dir = FLAGS.checkpoint_dir
     if not os.path.exists(checkpoint_dir):
@@ -102,10 +108,10 @@ def main():
         
     #########################hook#####################################
     
-    profiler_hook = tf.train.ProfilerHook(save_secs=360, output_dir=sinfpsgpu_dir, show_memory=True,show_dataflow=True)
+    profiler_hook = tf.train.ProfilerHook(save_secs=360, output_dir=logrootpath, show_memory=True,show_dataflow=True)
 
     summary_op = tf.summary.merge_all()
-    summary_hook = tf.train.SummarySaverHook(save_secs=360, output_dir=sinfpsgpu_dir, summary_op=summary_op)
+    summary_hook = tf.train.SummarySaverHook(save_secs=360, output_dir=logrootpath, summary_op=summary_op)
     
     if FLAGS.debug == True:
         tensors_to_log = [global_step, yolo.total_loss]
@@ -121,7 +127,7 @@ def main():
     config.gpu_options.allow_growth = True
     # config.gpu_options.allocator_type = 'BFC'
     # config.gpu_options.per_process_gpu_memory_fraction = 0.8
-    proc = start_gpulog(sinfpsgpu_dir, gpulog_name)
+    proc = start_gpulog(logrootpath, gpulog_name)
 
     #######################train#####################################
     
