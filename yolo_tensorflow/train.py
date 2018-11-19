@@ -135,7 +135,7 @@ def main():
     # config.gpu_options.per_process_gpu_memory_fraction = 0.8
     config = tf.ConfigProto(allow_soft_placement = True, log_device_placement=False)
     config.gpu_options.allow_growth = True
-    proc = start_gpulog(disfpsgpu_dir, gpulog_name)
+    proc = start_gpulog(logrootpath, gpulog_name)
     ################################################################################
     
     ###########################train####################################################
