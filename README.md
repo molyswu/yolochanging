@@ -9,18 +9,18 @@
 - change BATCH_SIZE,NUM_ENQUEUE_THREADS, MUL_QUEUE_BATCH(how many times is the queue size is based on batch_size, eg. 2 means double the size of batchsize as the size of inputqueue ) and PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP to reach 100% of GPU utilisation and cpu utisage.
 
 # Naive version feed input:  
-run base_run.sh
+run run_base.sh
 
 # Single machine training with pipeline  
-run run_single.sh, please write the --watch-gpu the same as the visible gpu
+run run_single.sh, please write the --watch-gpu the same id as the visible gpu
 
 
 # Distributed training  
-run ps.sh
-run worker0.sh --watch-gpu=0
-run worker1.sh  --watch-gpu=1
-set different visible gpu to each one. There could be a problem that some can always see first gpu.
-It should be solved by adding in the code
+run ps.sh  
+run worker0.sh --watch-gpu=0  
+run worker1.sh  --watch-gpu=1  
+set watch-gpu id the same as visible gpu to each one. There could be a problem that some can always see first gpu.
+It should have been solved by adding in the code, by 
 
 increase the batch size and queue size. watch the profiler json so that gpu is fully used and cpu do not be idle for too long time
 
