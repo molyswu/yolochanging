@@ -12,7 +12,7 @@
 run base_run.sh
 
 # Single machine training with pipeline  
-run single_run.sh, please write the --watch-gpu the same as the visible gpu
+run run_single.sh, please write the --watch-gpu the same as the visible gpu
 
 
 # Distributed training  
