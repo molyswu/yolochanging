@@ -5,7 +5,7 @@
 
 # Aim
 - train 3 benchmarks: naive version, single machine with pipeline, distirbuted training. fps(frames per second) should rise.
-- achieve 99-100 GPU usage for last two, achieve 70%-80% GPU usage for naive version. 
+- achieve stable 99%-100% GPU usage for last two, achieve 70%-80% GPU usage for naive version. 
 
 # How: Change parameters to reach 100% GPU usage  
 - Change the parameters in yolo_tensorflow/yolo/config.py  
