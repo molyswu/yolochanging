@@ -15,13 +15,11 @@
 
 
 #  Set of benchmarks
-## Naive version
+### Naive version
 run run_base.sh
-
-## Single machine training with pipeline  
+### Single machine training with pipeline  
 run run_single.sh, please write the --watch-gpu the same id as the visible gpu
-
-## Distributed training  
+### Distributed training  
 run ps.sh  
 run worker0.sh --watch-gpu=0  
 run worker1.sh  --watch-gpu=1  
