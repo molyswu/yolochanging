@@ -1,7 +1,8 @@
-# Install
+# Install dataset and environ
 - cd pascalvoc/  
-- pip install requirement.txt  
 - bash download.sh  to download dataset(500 MB, sorry I only downlodaed one year data, but it is this big)
+- pip install requirement.txt  
+
 
 # Aim
 - train 3 benchmarks: naive version, single machine with pipeline, distirbuted training. fps(frames per second) should rise.
@@ -13,8 +14,7 @@
 - change BATCH_SIZE,NUM_ENQUEUE_THREADS, MUL_QUEUE_BATCH(how many times is the queue size is based on batch_size, eg. 2 means double the size of batchsize as the size of inputqueue, 2 or 3 should be enough) and PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP to reach 100% of GPU utilisation and cpu utisage.
 - loss is not important, better do not save checkpoint. You may stop (CTRL+C) after 5 minutes of training. Just wait it get stable fps.
 
-
-#  Set of benchmarks
+#  Run 3 benchmarks
 ### Naive version
 run run_base.sh
 ### Single machine training with pipeline  
