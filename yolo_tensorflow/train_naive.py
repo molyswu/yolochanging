@@ -74,6 +74,8 @@ def main():
                 proc.kill()
         return proc
 
+    tf.reset_default_graph()
+
     with tf.device("/device:GPU:" + str(FLAGS.watch_gpu)):
         yolo = YOLONet()
     
@@ -137,12 +139,8 @@ def main():
     
     
     with tf.train.MonitoredTrainingSession(hooks=hooks,config=config) as sess:
-        images = tf.placeholder(
-            dtype=tf.float32, shape=[None, cfg.IMAGE_SIZE, cfg.IMAGE_SIZE, 3],
-            name='images')
-        labels = tf.placeholder(
-            dtype=tf.float32,
-            shape=[None, cfg.CELL_SIZE, cfg.CELL_SIZE, 5 + len(cfg.CLASSES)], name='labels')
+        
+        
         start_global_step_value = sess.run(global_step)
         timer = Timer(start_global_step_value)
         # local_iter = 0
@@ -155,7 +153,7 @@ def main():
         images, labels = pascal.get_batch()
         feed_dict = {yolo.images: images, yolo.labels: labels}
         yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op],feed_dict=feed_dict)
-        n = 1
+        n = 0
         while not sess.should_stop():
             n = n + 1
             
