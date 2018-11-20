@@ -15,8 +15,7 @@
 - loss is not important, better do not save checkpoint. You may stop (CTRL+C) after 5 minutes of training. Just wait it get stable fps.
 
 #  Run 3 benchmarks
-### Naive version
-run run_base.sh
+
 ### Single machine training with pipeline  
 run run_single.sh, please write the --watch-gpu the same id as the visible gpu
 ### Distributed training  
@@ -25,6 +24,8 @@ run worker0.sh --watch-gpu=0
 run worker1.sh  --watch-gpu=1  
 set watch-gpu id the same as visible gpu to each one. There could be a problem that some can always see first gpu.
 It should have been solved by adding in the code ""
+### SORRY TIHS ONE BROKE ， DO NOT RUN THIS. I NEED TO CEHCK Naive version
+run run_base.sh
 
 # Notice
 ## About the save steps of profiler
