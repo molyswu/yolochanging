@@ -1,4 +1,4 @@
-mport os
+import os
 import argparse
 import datetime
 import tensorflow as tf
@@ -74,18 +74,19 @@ def main():
                 proc.wait()
         return proc
 
-    yolo = YOLONet()
+    with tf.device("/device:GPU:" + str(FLAGS.watch_gpu)):
+        yolo = YOLONet()
     
-    pascal = pascal_voc('train')
-    
-    global_step = tf.train.get_or_create_global_step()
-    learning_rate = tf.train.exponential_decay(
-        initial_learning_rate, global_step, decay_steps,
-        decay_rate, staircase, name='learning_rate')
-    optimizer = tf.train.GradientDescentOptimizer(
-        learning_rate=learning_rate)
-    train_op = slim.learning.create_train_op(
-        yolo.total_loss, optimizer, global_step=global_step)
+        pascal = pascal_voc('train')
+        
+        global_step = tf.train.get_or_create_global_step()
+        learning_rate = tf.train.exponential_decay(
+            initial_learning_rate, global_step, decay_steps,
+            decay_rate, staircase, name='learning_rate')
+        optimizer = tf.train.GradientDescentOptimizer(
+            learning_rate=learning_rate)
+        train_op = slim.learning.create_train_op(
+            yolo.total_loss, optimizer, global_step=global_step)
     
     # tensors_to_log = [global_step, yolo.total_loss]
     #
@@ -158,7 +159,9 @@ def main():
                         log.write("%.4f,%.4f,%.4f,%d,%s\n" % txtData)
             
                     timer.tic()
-            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+            #yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict=feed_dict)
+            
             
             # local_iter = local_iter + 1
             # timer.tic()
