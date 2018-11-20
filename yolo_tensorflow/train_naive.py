@@ -71,7 +71,7 @@ def main():
                 proc.terminate()
             except OSError:
                 pass
-                proc.wait()
+                proc.kill()
         return proc
 
     with tf.device("/device:GPU:" + str(FLAGS.watch_gpu)):
@@ -130,10 +130,11 @@ def main():
     config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
     config.gpu_options.allow_growth = True
     # config.gpu_options.allocator_type = 'BFC'
-    # config.gpu_options.per_process_gpu_memory_fraction = 0.8
+    config.gpu_options.per_process_gpu_memory_fraction = 0.8   #do not assign all at the begining
     proc = start_gpulog(logrootpath, gpulog_name)
     
-    with tf.train.MonitoredSession(hooks=hooks) as sess:
+    #Forgot to put checkpoint, but ehh anyway not use it here
+    with tf.train.MonitoredSession(hooks=hooks,config=config) as sess:
         start_global_step_value = sess.run(global_step)
         timer = Timer(start_global_step_value)
         # local_iter = 0
@@ -166,8 +167,14 @@ def main():
             images, labels = pascal.get_batch()
             feed_dict = {yolo.images: images, yolo.labels: labels}
             yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict=feed_dict)
-            
-            
+        
+        print('Done training.')
+        
+        try:
+            proc.terminate()
+        except OSError:
+            pass
+            print("Kill subprocess failed. Kill nvidia-smi mannually")
             # local_iter = local_iter + 1
             # timer.tic()
             # images, labels = pascal.get_batch()
