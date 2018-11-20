@@ -134,7 +134,15 @@ def main():
     proc = start_gpulog(logrootpath, gpulog_name)
     
     #Forgot to put checkpoint, but ehh anyway not use it here
+    
+    
     with tf.train.MonitoredTrainingSession(hooks=hooks,config=config) as sess:
+        images = tf.placeholder(
+            dtype=tf.float32, shape=[None, cfg.IMAGE_SIZE, cfg.IMAGE_SIZE, 3],
+            name='images')
+        labels = tf.placeholder(
+            dtype=tf.float32,
+            shape=[None, cfg.CELL_SIZE, cfg.CELL_SIZE, 5 + len(cfg.CLASSES)], name='labels')
         start_global_step_value = sess.run(global_step)
         timer = Timer(start_global_step_value)
         # local_iter = 0

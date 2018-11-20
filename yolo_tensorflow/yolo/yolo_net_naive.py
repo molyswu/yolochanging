@@ -34,7 +34,7 @@ class YOLONet(object):
             (self.boxes_per_cell, self.cell_size, self.cell_size)), (1, 2, 0))
 
         self.images = tf.placeholder(
-            dtype=tf.float32, shape=[cfg.BATCH_SIZE, self.image_size, self.image_size, 3],
+            dtype=tf.float32, shape=[None, self.image_size, self.image_size, 3],
             name='images')
         self.logits = self.build_network(
             self.images, num_outputs=self.output_size, alpha=self.alpha,
