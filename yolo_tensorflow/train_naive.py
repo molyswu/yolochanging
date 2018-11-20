@@ -134,7 +134,7 @@ def main():
     proc = start_gpulog(logrootpath, gpulog_name)
     
     #Forgot to put checkpoint, but ehh anyway not use it here
-    with tf.train.MonitoredSession(hooks=hooks,config=config) as sess:
+    with tf.train.MonitoredTrainingSession(hooks=hooks,config=config) as sess:
         start_global_step_value = sess.run(global_step)
         timer = Timer(start_global_step_value)
         # local_iter = 0
