@@ -146,7 +146,7 @@ def main():
         timer.tic()
         images, labels = pascal.get_batch()
         feed_dict = {yolo.images: images, yolo.labels: labels}
-        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op],feed_dict=feed_dict)
         n = 1
         while not sess.should_stop():
             n = n + 1
