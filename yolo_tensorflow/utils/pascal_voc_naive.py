@@ -5,7 +5,7 @@ import cv2
 import pickle
 import copy
 import yolo.config as cfg
-from utils.timer import Timer
+import time
 
 
 class pascal_voc(object):
@@ -57,8 +57,9 @@ class pascal_voc(object):
 		return image
 	
 	def prepare(self):
-		timerprepare = Timer()
-		timerprepare.tic()
+		# timerprepare = Timer()
+		# timerprepare.tic()
+		start_prepare_time = time.time()
 		gt_labels = self.load_labels()
 		if self.flipped:
 			print('Appending horizontally-flipped training examples ...')
@@ -76,10 +77,10 @@ class pascal_voc(object):
 			gt_labels += gt_labels_cp
 		np.random.shuffle(gt_labels)
 		self.gt_labels = gt_labels
-		timerprepare_elapse = timerprepare.tocInput()
+		timer_prepare_elapse = time.time() - start_prepare_time
 		print(
 			"++++++++++++++++++++++++++++++++++++++++++++++++++++++Time elapse to prepare(from cache or new) is %d s +++++++++++++++++++++++",
-			timerprepare_elapse)
+			timer_prepare_elapse)
 		
 		return gt_labels
 	
