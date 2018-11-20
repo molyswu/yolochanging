@@ -143,10 +143,13 @@ def main():
         local_max_iter = FLAGS.stop_globalstep - start_global_step_value
 
         timer.tic()
+        images, labels = pascal.get_batch()
+        feed_dict = {yolo.images: images, yolo.labels: labels}
         yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
         n = 1
         while not sess.should_stop():
             n = n + 1
+            
             if n > 0 and n % iters_per_toc == 0:
                 if n > 0 and n % iters_per_toc == 0:
                     local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
@@ -160,6 +163,8 @@ def main():
             
                     timer.tic()
             #yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+            images, labels = pascal.get_batch()
+            feed_dict = {yolo.images: images, yolo.labels: labels}
             yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict=feed_dict)
             
             
