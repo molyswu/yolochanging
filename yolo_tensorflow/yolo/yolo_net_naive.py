@@ -34,7 +34,7 @@ class YOLONet(object):
             (self.boxes_per_cell, self.cell_size, self.cell_size)), (1, 2, 0))
 
         self.images = tf.placeholder(
-            tf.float32, [cfg.BATCH_SIZE, self.image_size, self.image_size, 3],
+            dtype=tf.float32, shape=[cfg.BATCH_SIZE, self.image_size, self.image_size, 3],
             name='images')
         self.logits = self.build_network(
             self.images, num_outputs=self.output_size, alpha=self.alpha,
@@ -42,8 +42,8 @@ class YOLONet(object):
 
         if is_training:
             self.labels = tf.placeholder(
-                tf.float32,
-                [None, self.cell_size, self.cell_size, 5 + self.num_class])
+                dtype=tf.float32,
+                shape=[None, self.cell_size, self.cell_size, 5 + self.num_class],name='labels')
             self.loss_layer(self.logits, self.labels)
             self.total_loss = tf.losses.get_total_loss()
             tf.summary.scalar('total_loss', self.total_loss)
