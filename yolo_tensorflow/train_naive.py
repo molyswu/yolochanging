@@ -89,27 +89,7 @@ def main():
             learning_rate=learning_rate)
         train_op = slim.learning.create_train_op(
             yolo.total_loss, optimizer, global_step=global_step)
-    
-    # tensors_to_log = [global_step, yolo.total_loss]
-    #
-    # checkpoint_dir = "checkpoints"
-    # summary_dir="summary_dir"
-    # profiler_dir="profiler_dir"
-    # def formatter(curvals):
-    #     print("Global step %d, GenLoss %f!" % (
-    #         curvals[global_step], curvals[yolo.total_loss]))
-    #
-    # logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=50, formatter=formatter)
-    # profiler_hook = tf.train.ProfilerHook(save_secs=60, output_dir=profiler_dir, show_memory=True)
-    # summary_op = tf.summary.merge_all()
-    # summary_hook = tf.train.SummarySaverHook(save_secs=30, output_dir=summary_dir, summary_op=summary_op)
-    #
-    # checkpoint_hook = tf.train.CheckpointSaverHook(checkpoint_dir, save_steps=5000, checkpoint_basename = 'YOLO_small.ckpt')
-    #
-    # hooks = [tf.train.StopAtStepHook(last_step = FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook, checkpoint_hook]
-    #last step is global step
-
-    #########################hook#####################################
+   
 
     profiler_hook = tf.train.ProfilerHook(save_steps=prof_save_step, output_dir=logrootpath, show_memory=True,
                                           show_dataflow=True)
@@ -150,9 +130,9 @@ def main():
         local_max_iter = FLAGS.stop_globalstep - start_global_step_value
 
         timer.tic()
-        images, labels = pascal.get_batch()
-        feed_dict = {yolo.images: images, yolo.labels: labels}
-        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op],feed_dict=feed_dict)
+        images_data, labels_data = pascal.get_batch()
+        feed_dict = {yolo.images: images_data, yolo.labels: labels_data}
+        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict=feed_dict)
         n = 0
         while not sess.should_stop():
             n = n + 1
@@ -170,9 +150,9 @@ def main():
             
                     timer.tic()
             #yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-            images, labels = pascal.get_batch()
-            feed_dict = {yolo.images: images, yolo.labels: labels}
-            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict=feed_dict)
+            images_data, labels_data = pascal.get_batch()
+            feed_dict = {yolo.images: images_data, yolo.labels: labels_data}
+            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op], feed_dict = feed_dict)
         
         print('Done training.')
         
@@ -198,6 +178,26 @@ def main():
                 #Local iter 10, batch_size 24, current iter load time: 0.371289s, current process time: 28.804506s current_iter_fps input excluded 0.833203, local_average_fps: 0.815096
                 # print(log_str)
 
+    # tensors_to_log = [global_step, yolo.total_loss]
+    #
+    # checkpoint_dir = "checkpoints"
+    # summary_dir="summary_dir"
+    # profiler_dir="profiler_dir"
+    # def formatter(curvals):
+    #     print("Global step %d, GenLoss %f!" % (
+    #         curvals[global_step], curvals[yolo.total_loss]))
+    #
+    # logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=50, formatter=formatter)
+    # profiler_hook = tf.train.ProfilerHook(save_secs=60, output_dir=profiler_dir, show_memory=True)
+    # summary_op = tf.summary.merge_all()
+    # summary_hook = tf.train.SummarySaverHook(save_secs=30, output_dir=summary_dir, summary_op=summary_op)
+    #
+    # checkpoint_hook = tf.train.CheckpointSaverHook(checkpoint_dir, save_steps=5000, checkpoint_basename = 'YOLO_small.ckpt')
+    #
+    # hooks = [tf.train.StopAtStepHook(last_step = FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook, checkpoint_hook]
+    # last step is global step
+
+    #########################hook#####################################
 
 if __name__ == '__main__':
     # python train.py --weights YOLO_small.ckpt --gpu 0
