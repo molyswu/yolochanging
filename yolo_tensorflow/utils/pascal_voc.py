@@ -33,6 +33,7 @@ class Pascal_voc(object):
         self.prepare()
 	
     def get_one_image_label_element(self):
+        current_index = 0
         with self._lock:
             current_index = self._next_idx
             self._next_idx += 1
