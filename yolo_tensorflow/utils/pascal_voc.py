@@ -45,7 +45,7 @@ class Pascal_voc(object):
             (self.cell_size, self.cell_size, 25))
         imname = self.gt_labels[self._next_idx]['imname']
         flipped = self.gt_labels[self._next_idx]['flipped']
-        
+        print("the image name is %s"% imname)
         image[:, :, :] = self.image_read(imname, flipped)
         label[:, :, :] = self.gt_labels[self._next_idx]['label']
         
