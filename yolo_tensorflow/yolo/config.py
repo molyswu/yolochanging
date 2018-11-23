@@ -31,7 +31,7 @@ __file__= os.getcwd()
 DATA_PATH = Path(__file__).parents[0]
 #DATA_PATH = str(p)
 print("+++++++++++++++++++++++++++++++++++++DATA_PATH"+str(DATA_PATH)+"+++++++++++++++++++++++++++++++++++++++++++++++")
-PASCAL_PATH = os.path.join(DATA_PATH, 'pascal_voc')
+PASCAL_PATH = os.path.join(str(DATA_PATH), 'pascal_voc')
 
 CACHE_PATH = os.path.join(PASCAL_PATH, 'cache')
 
