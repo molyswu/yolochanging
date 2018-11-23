@@ -35,11 +35,6 @@ PASCAL_PATH = os.path.join(DATA_PATH, 'pascal_voc')
 
 CACHE_PATH = os.path.join(PASCAL_PATH, 'cache')
 
-OUTPUT_DIR = os.path.join(PASCAL_PATH, 'output')
-
-WEIGHTS_DIR = os.path.join(PASCAL_PATH, 'weights')
-
-
 WEIGHTS_FILE = None
 # WEIGHTS_FILE = os.path.join(DATA_PATH, 'weights', 'YOLO_small.ckpt')
 
