@@ -28,30 +28,26 @@ class Pascal_voc(object):
         self.epoch = 1
         self.gt_labels = None
         self.gt_labels_length = 0
-        #self._lock = threading.Lock()
+        self._lock = threading.Lock()
         self._next_idx = 0
         self.prepare()
 	
     def get_one_image_label_element(self):
-        
-        
-        #with self._lock:
-        #    current_index = self._next_idx
-        #    self._next_idx += 1
+        with self._lock:
+            current_index = self._next_idx
+            self._next_idx += 1
                
         image = np.zeros(
             (self.image_size, self.image_size, 3))
         label = np.zeros(
             (self.cell_size, self.cell_size, 25))
-        imname = self.gt_labels[self._next_idx]['imname']
-        flipped = self.gt_labels[self._next_idx]['flipped']
-        print("the image name is %s"% imname)
+        imname = self.gt_labels[current_index]['imname']
+        flipped = self.gt_labels[current_index]['flipped']
+        
         image[:, :, :] = self.image_read(imname, flipped)
-        label[:, :, :] = self.gt_labels[self._next_idx]['label']
+        label[:, :, :] = self.gt_labels[current_index]['label']
         
-        print("In one_image_label function , print out %d image and its label" % self._next_idx)
-        
-        self._next_idx = self._next_idx+1
+        print("In one_image_label function , print out %d image and its label" % current_index)
         
         return (image, label)
 
