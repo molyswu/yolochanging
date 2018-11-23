@@ -18,6 +18,6 @@ run worker1.sh  --watch-gpu=1
 set watch-gpu id the same as visible gpu to each one. There could be a problem that some can always see first gpu.
 It should have been solved by adding in the code ""
 
-# How: Change parameters 
+# Chnage parameters 
 - Change the parameters in yolo_tensorflow/yolo/config.py  
 - change hosts and workers to start, BATCH_SIZE,NUM_ENQUEUE_THREADS, MUL_QUEUE_BATCH(how many times is the queue size is based on batch_size, eg. 2 means double the size of batchsize as the size of inputqueue, 2 or 3 should be enough) and PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP to reach 100% of GPU utilisation and cpu utisage.
