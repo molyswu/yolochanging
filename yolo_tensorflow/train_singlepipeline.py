@@ -69,10 +69,10 @@ def main():
     
     image_producer = Pascal_voc('train')
     
-    (current_index, image, label) = image_producer.get_one_image_label_element()
+    (image, label) = image_producer.get_one_image_label_element()
 
-    current_index = tf.Print(current_index, data=[current_index],
-                      message="CURRENT IDEX OF IMAGE IS :")
+    #current_index = tf.Print(current_index, data=[current_index],
+    #                  message="CURRENT IDEX OF IMAGE IS :")
 
     image_shape = (image_producer.image_size, image_producer.image_size, 3)
 

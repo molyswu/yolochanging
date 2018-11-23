@@ -33,7 +33,6 @@ class Pascal_voc(object):
         self.prepare()
 	
     def get_one_image_label_element(self):
-        current_index = 0
         with self._lock:
             current_index = self._next_idx
             self._next_idx += 1
@@ -50,7 +49,7 @@ class Pascal_voc(object):
         
         print("In one_image_label function , print out %d image and its label" % current_index)
         
-        return (current_index, image, label)
+        return (image, label)
 
     # def get_batch(self):
     #     # Define the operators
