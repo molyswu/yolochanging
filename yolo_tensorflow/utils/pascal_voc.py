@@ -164,7 +164,7 @@ class Pascal_voc(object):
         """
         imname = os.path.join(self.data_path, 'JPEGImages', index + '.jpg')
         im = cv2.imread(imname)
-        cv2.imshow('image', im)
+        #cv2.imshow('image', im)
         h_ratio = 1.0 * self.image_size / im.shape[0]
         w_ratio = 1.0 * self.image_size / im.shape[1]
         # im = cv2.resize(im, [self.image_size, self.image_size])
@@ -193,7 +193,7 @@ class Pascal_voc(object):
                 continue
             label[y_ind, x_ind, 0] = 1
             label[y_ind, x_ind, 1:5] = boxes
-            # last one is the class index
+            #one light up, although dont know why this implementation
             label[y_ind, x_ind, 5 + cls_ind] = 1
         
         return label, len(objs)
