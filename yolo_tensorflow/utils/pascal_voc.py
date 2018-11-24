@@ -49,7 +49,7 @@ class Pascal_voc(object):
         
         print("In one_image_label function , print out %d image and its label" % current_index)
         
-        return (image, label)
+        return (current_index, image, label)
 
     # def get_batch(self):
     #     # Define the operators
