@@ -14,7 +14,7 @@ import time
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--watch_gpu', required=True, type=int, help="watch gpu id filled Set it the same as visible gpu id")
-    parser.add_argument('--debug', default=False, type=bool)
+    parser.add_argument('--debug', default=True, type=bool)
     parser.add_argument('--stop_globalstep', default=1000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--task_index',default=0, type=int)
@@ -71,7 +71,7 @@ def main():
     
     (current_index, image, label) = image_producer.get_one_image_label_element()
     current_index = tf.Print(current_index, data=[current_index],
-                     message="CURRENT IDEX OF IMAGE IS :")
+                     message="CURRENT INDEX OF IMAGE IS :")
 
     image_shape = (image_producer.image_size, image_producer.image_size, 3)
 
