@@ -18,9 +18,14 @@ def main():
     parser.add_argument('--stop_globalstep', default=1000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--task_index',default=0, type=int)
-    
-    prof_save_step = cfg.PROFILER_SAVE_STEP #120
-    sum_save_step = cfg.SUMMARY_SAVE_STEP #500
+    parser.add_argument('--ui_type',type=str,default="curses",help="Command-line user interface type (curses | readline)")
+    parser.add_argument(
+    "--tensorboard_debug_address",
+    type=str,
+    default=None,
+    help="Connect to the TensorBoard Debugger Plugin backend specified by "
+    "the gRPC address (e.g., localhost:1234). Mutually exclusive with the "
+    "--debug flag.") 
     FLAGS, unparsed = parser.parse_known_args()
     
     initial_learning_rate = cfg.LEARNING_RATE
@@ -28,26 +33,6 @@ def main():
     decay_rate = cfg.DECAY_RATE
     staircase = cfg.STAIRCASE
     
-    ########################dir#######################################
-    singlepipe_dir = "Single_Pipe_train_logs"
-    if not os.path.exists(singlepipe_dir):
-        os.makedirs(singlepipe_dir)
-    
-    inside_bsnQnM_dir = "Single_Pipe"+cfg.BS_NT_MUL_PREFIX
-    logrootpath = os.path.join(singlepipe_dir, inside_bsnQnM_dir)
-    if not os.path.exists(logrootpath):
-        os.makedirs(logrootpath)
-    
-    fpslog_name = "Single_Pipe"+cfg.BS_NT_MUL_PREFIX+ "fps_log.txt"
-    concated_path = logrootpath + "/" + fpslog_name
-
-    checkpoint_dir = FLAGS.checkpoint_dir
-    if not os.path.exists(checkpoint_dir):
-        os.makedirs(checkpoint_dir)
-
-    gpulog_name = "Single_Pipe"+"gpu"+str(FLAGS.watch_gpu)+cfg.BS_NT_MUL_PREFIX+"_gpulog.txt"
-
-    #########################pipeline###################################
     tf.reset_default_graph()
     
     image_producer = Pascal_voc('train')
@@ -116,7 +101,7 @@ def main():
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
     
-    start_global_step_value = sess.run(global_step)
+    start_global_step_value = 0
     timer = Timer(start_global_step_value)
 
     iters_per_toc = 20
