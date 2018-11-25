@@ -1,0 +1,1 @@
+rm -rf ~/miniconda3
