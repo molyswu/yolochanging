@@ -9,9 +9,9 @@
 - stable 99%-100% GPU usage for 2 tests.
 
 #  Run 2 tests
-### Single machine training 
+### 1. Single machine training 
 bash run_single.sh --watch_gpu=0 [--watch-gpu should be the same as the visible gpu]
-### Distributed training  
+### 2. Distributed training  
 bash ps.sh  
 bash worker0.sh --watch-gpu=0  
 bash worker1.sh  --watch-gpu=1  
