@@ -1,7 +1,8 @@
 # Install dataset and environ
 - cd pascalvoc/  
 - bash download.sh  to download dataset(500 MB, sorry I only downlodaed one year data, but it is this big)
-- conda py36tf_1.yml
+- (For environment, I only used tensorflow-gpu and opencv. If your environment does not work, try this). 
+- cd env, bash build_env.sh
 
 
 # Aim
