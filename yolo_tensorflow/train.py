@@ -13,7 +13,7 @@ def main():
     parser.add_argument("--job_name", type=str, default="")
     parser.add_argument("--task_index", type=int, default=0)
     parser.add_argument('--debug', default=False, type=bool)
-    parser.add_argument('--stop_globalstep', default=5000, type=int)
+    parser.add_argument('--stop_globalstep', default=2000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--watch_gpu',required=True ,type=int, help="watch gpu id filled Set it the same as visible gpu id")
     
