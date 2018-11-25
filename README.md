@@ -16,9 +16,9 @@ bash worker0.sh --watch-gpu=0
 bash worker1.sh  --watch-gpu=1  
 [--watch-gpu should be the same as the visible gpu]
 
-# yolo/config.py
+# Change yolo_tensorflow/yolo/config.py
 - Change the parameters in yolo_tensorflow/yolo/config.py  
-#-----------------Parameters to be changed-----------------------------#
+-----------------Parameters to be changed-----------------------------
 #############################################################################
 PS_HOSTS  = '172.20.83.210:8897'
 
