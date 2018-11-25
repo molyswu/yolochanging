@@ -21,19 +21,19 @@ bash worker1.sh  --watch-gpu=1
 - MUL_QUEUE_BATCH means how many times is the queue size is of batch_size. 2 means 10*2=20
 - PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP can not be too small, because I found especially summary take long time
 
-#############################################################################
-PS_HOSTS  = '172.20.83.210:8897'
+#############################################################################  
+PS_HOSTS  = '172.20.83.210:8897'  
 
-WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
+WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'  
 
-BATCH_SIZE = 10
+BATCH_SIZE = 10  
 
-NUM_ENQUEUE_THREADS = 2
+NUM_ENQUEUE_THREADS = 2  
 
-MUL_QUEUE_BATCH = 2
+MUL_QUEUE_BATCH = 2  
 
-PROFILER_SAVE_STEP = 60
+PROFILER_SAVE_STEP = 60  
 
-SUMMARY_SAVE_STEP = 120
+SUMMARY_SAVE_STEP = 120  
 
-#############################################################################
+#############################################################################  
