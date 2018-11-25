@@ -21,7 +21,8 @@ bash worker1.sh  --watch-gpu=1
 - Change parameters in yolo_tensorflow/yolo/config.py  
 - MUL_QUEUE_BATCH means how many times is the queue size is of batch_size. 2 means 10*2=20
 - PROFILER_SAVE_STEP, SUMMARY_SAVE_STEP can not be too small, because I found especially summary take long time
-- How does the yolo/config.py look like and where to change? change here
+- How does the yolo/config.py look like and where to change? change here  
+
 #############################################################################  
 PS_HOSTS  = '172.20.83.210:8897'  
 
