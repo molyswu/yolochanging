@@ -85,7 +85,7 @@ def main():
 
     #######################train#####################################
     
-    
+    init=tf.global_variables_initializer() 
     sess = tf.InteractiveSession()
 
     if FLAGS.debug and FLAGS.tensorboard_debug_address:
@@ -97,10 +97,11 @@ def main():
     elif FLAGS.tensorboard_debug_address:
         sess = tf_debug.TensorBoardDebugWrapperSession(
             sess, FLAGS.tensorboard_debug_address)
-    
+    sess.run(init)
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
-    
+    coord.join(threads)
+ 
     start_global_step_value = 0
     timer = Timer(start_global_step_value)
 
@@ -112,24 +113,9 @@ def main():
     yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
     n = 1
     while n<1000:
-        n = n + 1
-        if n > 0 and n % iters_per_toc == 0:
-            if n > 0 and n % iters_per_toc == 0:
-                local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
-                timetowait = timer.remain(n, local_max_iter)
-        
-                txtData = local_avg_fps, global_avg_fps, yolo_loss, global_step_value, timetowait
-                print(txtForm % txtData)
-                
-                with open(concated_path, 'a+') as log:
-                    log.write("%.4f,%.4f,%.4f,%d,%s\n" % txtData)
-                
-                timer.tic()
-
-        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-    
+	yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+  
     coord.request_stop()
-    coord.join(threads)
         
     print('Done debugging training.')
 
