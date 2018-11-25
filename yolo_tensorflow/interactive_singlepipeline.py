@@ -45,7 +45,7 @@ def main():
 
     label_size = (image_producer.cell_size, image_producer.cell_size, 25)  # possible value is 0 or 1
 
-    processed_queue = tf.FIFOQueue(capacity=int(image_producer.batch_size * 1.5),
+    processed_queue = tf.FIFOQueue(capacity=int(image_producer.batch_size * 2),
     shapes = [image_shape, label_size],
     dtypes = [tf.float32, tf.float32],
     name = 'processed_queue')
@@ -65,18 +65,17 @@ def main():
 
     #########################graph###################################
     
-    with tf.device("/device:GPU:"+str(FLAGS.watch_gpu)):
-        yolo = YOLONet(images, labels)
-        
-        global_step = tf.train.get_or_create_global_step()
-        learning_rate = tf.train.exponential_decay(
-            initial_learning_rate, global_step, decay_steps,
-            decay_rate, staircase, name='learning_rate')
-        optimizer = tf.train.GradientDescentOptimizer(
-            learning_rate=learning_rate)
-        train_op = slim.learning.create_train_op(
-            yolo.total_loss, optimizer, global_step=global_step)
-        
+    yolo = YOLONet(images, labels)
+
+    global_step = tf.train.get_or_create_global_step()
+    learning_rate = tf.train.exponential_decay(
+			initial_learning_rate, global_step, decay_steps,
+			decay_rate, staircase, name='learning_rate')
+    optimizer = tf.train.GradientDescentOptimizer(
+		learning_rate=learning_rate)
+    train_op = slim.learning.create_train_op(
+		yolo.total_loss, optimizer, global_step=global_step)
+
     config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
     config.gpu_options.allow_growth = True
     # config.gpu_options.allocator_type = 'BFC'
@@ -84,8 +83,6 @@ def main():
     
 
     #######################train#####################################
-    
-    init=tf.global_variables_initializer() 
     sess = tf.InteractiveSession()
 
     if FLAGS.debug and FLAGS.tensorboard_debug_address:
@@ -97,26 +94,21 @@ def main():
     elif FLAGS.tensorboard_debug_address:
         sess = tf_debug.TensorBoardDebugWrapperSession(
             sess, FLAGS.tensorboard_debug_address)
-    sess.run(init)
+    sess.run(tf.global_variables_initializer())
+    sess.run(tf.local_variables_initializer())
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
-    coord.join(threads)
- 
-    start_global_step_value = 0
-    timer = Timer(start_global_step_value)
-
-    iters_per_toc = 20
-    txtForm = "Training speed: local avg %f fps, global %f fps, loss %f, global step: %d, predict to wait %s"
-    local_max_iter = FLAGS.stop_globalstep - start_global_step_value
+   
     
-    timer.tic()
     yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
     n = 1
     while n<1000:
-	yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-  
+        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+        n=n+1
+    sess.close()
     coord.request_stop()
-        
+    coord.join(threads)    
+    
     print('Done debugging training.')
 
 
