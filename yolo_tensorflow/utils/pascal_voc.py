@@ -176,7 +176,6 @@ class Pascal_voc(object):
         
         for obj in objs:
             bbox = obj.find('bndbox')
-            # Make pixel indexes 0-based。only one goal here that is make the 1 based pixel to 0 based and the same size as the original image
             x1 = max(min((float(bbox.find('xmin').text) - 1) * w_ratio, self.image_size - 1), 0)
             y1 = max(min((float(bbox.find('ymin').text) - 1) * h_ratio, self.image_size - 1), 0)
             x2 = max(min((float(bbox.find('xmax').text) - 1) * w_ratio, self.image_size - 1), 0)
