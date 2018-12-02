@@ -185,7 +185,7 @@ class Pascal_voc(object):
             cls_ind = self.class_to_ind[obj.find('name').text.lower().strip()]
             # cls_ind is the index of the 20 classes
             boxes = [(x2 + x1) / 2.0, (y2 + y1) / 2.0, x2 - x1, y2 - y1]
-            # The (x,y) coordinates represent the center of the box relative to the bounds of the grid cell.So we have cell_size here. So it means the center x and center y will be in the range of cell size, relative to its real position in the image_size
+            # The (x,y) coordinates represent the center of the box relative to the bounds of the grid cell.
             x_ind = int(boxes[0] * self.cell_size / self.image_size)
             y_ind = int(boxes[1] * self.cell_size / self.image_size)
             if label[y_ind, x_ind, 0] == 1:
