@@ -6,8 +6,8 @@
 - Tried Horovod allreduce on 2 des machines, but because of Network speed, still very slow. better than third, worse than second
 - Tried gRPC on Tesla v100 workstation(4 gpu). gRPC by default works fine, because the speed are similiar on ecah machine, but synchronous
 - Tried NCCL horovod all reduce on Tesla v100 workstation. Verified 2 things   
-   -NCCL is better than gRPC on same workstation
-   -TODO: Scalability graph of both gRPC and NCCL
+   - NCCL is better than gRPC on same workstation   
+   - TODO: Scalability graph of both gRPC and NCCL   
 
 # Install dataset and environ
 In this horovod test, base test is fixed with warm-up and good local and global fps  
