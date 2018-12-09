@@ -7,19 +7,19 @@ from pathlib import Path
 
 #-----------------Parameters to be changed-----------------------------#
 #############################################################################
-PS_HOSTS  = '172.20.83.210:8897'
+PS_HOSTS  = 'localhost:8897'
 
-WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
+WORKER_HOSTS = 'localhost:8898,localhost:8899'
 
-BATCH_SIZE = 10
+BATCH_SIZE = 50
 
 NUM_ENQUEUE_THREADS = 2
 
-MUL_QUEUE_BATCH = 1.3
+MUL_QUEUE_BATCH = 2
 
-PROFILER_SAVE_STEP = 120
+PROFILER_SAVE_STEP = 3600
 
-SUMMARY_SAVE_STEP = 150
+SUMMARY_SAVE_STEP = 3600
 
 #############################################################################
 
