@@ -103,7 +103,8 @@ def main():
     # from rank 0 to all other processes. This is necessary to ensure consistent
     # initialization of all workers when training is started with random weights
 # or restored from a checkpoint.
-    hooks = [hvd.BroadcastGlobalVariablesHook(0), tf.train.StopAtStepHook(last_step=stop_global_step)]
+    pm=PerformanceHook(50,)
+    hooks = [hvd.BroadcastGlobalVariablesHook(0), tf.train.StopAtStepHook(last_step=stop_global_step), pm]
     #######################train#####################################
     
     print('Start training ...')
@@ -112,32 +113,39 @@ def main():
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         
-        timer = Timer(0)
-
-        iters_per_toc = 20
-        txtForm = "Training speed: local avg %f fps, global %f fps, loss %f, global step: %d, predict to wait %s"
-        local_max_iter = stop_global_step
-        
-        timer.tic()
         yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-        n = 1
         while not sess.should_stop():
-            n = n + 1
-            if n > 0 and n % iters_per_toc == 0:
-                if n > 0 and n % iters_per_toc == 0:
-                    local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
-                    timetowait = timer.remain(n, local_max_iter)
-            
-                    txtData = local_avg_fps, global_avg_fps, yolo_loss, global_step_value, timetowait
-                    print(txtForm % txtData)
-                    
-                    timer.tic()
-            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+            yolo_loss, gs_step, _ = sess.run([yolo.total_loss, global_step, train_op])
         
         coord.request_stop()
         coord.join(threads)
         
     print('Done training.')
 
+class PerformanceMeasureHook(tf.train.SessionRunHook):
+    def __init__(self, every_n_step, global_step):
+        self.last_time = time.time()
+        self.last_gs = 0
+        self.global_step = global_step
+        self.every_n_step = every_n_step
+    
+    def before_run(self, run_context):
+        return tf.train.SessionRunArgs(self.global_step)
+    
+    def after_run(self, run_context, run_values):
+        cur_gs = run_values.results
+        cur_time = time.time()
+        if cur_gs - self.last_gs > self.every_n_step:
+   
+            # the thing is if we have stable speed, we dont need global average. but for two tcp, it is needed, because there are difference. and in horovod nccl, it is synchronous gradient descent, so anyway slower one have to wait for faster one   
+            speed = (cur_gs - self.last_gs) * batch_size / (cur_time - self.last_time)
+            
+            if(self.last_gs < batch_size*3):
+                 print('Iteration: %d, Warm-up, global_step: %d, Speed: %d fps'%(cur_gs/batch_size, cur_gs, speed))
+            else:
+                 print('Iteration: %d, global_step: %d, Speed: %d fps'%(cur_gs/batch_size, cur_gs, speed))
+            self.last_gs = cur_gs 
+            self.last_time = cur_time
+        
 if __name__ == '__main__':
     main()
