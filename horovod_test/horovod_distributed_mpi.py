@@ -5,7 +5,7 @@ import tensorflow as tf
 import yolo.config as cfg
 from yolo.yolo_net import YOLONet
 from utils.pascal_voc import Pascal_voc
-slim = tf.contrib.slim
+import tensorflow.contrib.slim as slim
 from utils.timer import Timer
 import subprocess
 import time
@@ -18,14 +18,13 @@ import horovod.tensorflow as hvd
 # mpi, all processes one piece of code
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--debug', default=True, type=bool)
-    parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
-#    parser.add_argument('--task_index',default=0, type=int)
-    FLAGS, unparsed = parser.parse_known_args()  
-    if os.path.exists(FLAGS.checkpoint_dir):
-        os.system("rm -rf %s"%FLAGS.checkpoint_dir)  
-    log_dir = FLAGS.checkpoint_dir   
+    if os.path.exists(cfg.LOG_DIR):
+        os.system("rm -rf %s"%cfg.LOG_DIR)  
+    tf.logging.set_verbosity(tf.logging.INFO)
+    
+    hvd.init()
+
+    log_dir = cfg.LOG_DIR if hvd.rank()==0 else None  
 
     stop_global_step = cfg.STOP_GLOBAL_STEP   
     prof_save_step = cfg.PROFILER_SAVE_STEP #120
@@ -67,8 +66,7 @@ def main():
 
     #########################graph###################################
    
-    hvd.init()    
-    print("Current rank is %d"%hvd.rank())
+    #print("Current rank is %d"%hvd.rank())
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.visible_device_list=str(hvd.local_rank())
@@ -81,19 +79,18 @@ def main():
     learning_rate = tf.train.exponential_decay(
     initial_learning_rate, global_step, decay_steps,
     decay_rate, staircase, name='learning_rate')
-        #optimizer = tf.train.GradientDescentOptimizer(
-        #    learning_rate=learning_rate)
+    optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
    
-    optimizer=tf.train.AdagradOptimizer(0.01*hvd.size())
+    #optimizer=tf.train.AdagradOptimizer(0.01*hvd.size())
     optimizer=hvd.DistributedOptimizer(optimizer) 
-    train_op = slim.learning.create_train_op(yolo.total_loss, optimizer, global_step=stop_global_step)
+    train_op = slim.learning.create_train_op(yolo.total_loss, optimizer, global_step=global_step)
         
     #########################hook#####################################
     
-    profiler_hook = tf.train.ProfilerHook(save_steps=prof_save_step, output_dir=logrootpath, show_memory=True,show_dataflow=True)
+    #profiler_hook = tf.train.ProfilerHook(save_steps=prof_save_step, output_dir=log_dir, show_memory=True,show_dataflow=True)
 
     summary_op = tf.summary.merge_all()
-    summary_hook = tf.train.SummarySaverHook(save_steps=sum_save_step, output_dir=logrootpath, summary_op=summary_op)
+    summary_hook = tf.train.SummarySaverHook(save_steps=sum_save_step, output_dir=log_dir, summary_op=summary_op)
    
    # tf.train.LoggingTensorHook(tensors={'step':global_steo,'loss':yolo.total_loss},every_n_iter=10) 
     tensors_to_log = [global_step, yolo.total_loss]
@@ -106,11 +103,11 @@ def main():
     # from rank 0 to all other processes. This is necessary to ensure consistent
     # initialization of all workers when training is started with random weights
 # or restored from a checkpoint.
-    hooks = [hvd.BroadcastGlobalVariablesHook(0),tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook]
+    hooks = [hvd.BroadcastGlobalVariablesHook(0), tf.train.StopAtStepHook(last_step=stop_global_step)]
     #######################train#####################################
     
     print('Start training ...')
-    with tf.train.MonitoredTrainingSession(config=config, hooks=hooks, checkpoint_dir=log_dir, save_checkpoint_steps = checkpoint_save_step) as sess:
+    with tf.train.MonitoredTrainingSession(config=config, hooks=hooks, checkpoint_dir=log_dir) as sess:
     
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
@@ -119,11 +116,11 @@ def main():
 
         iters_per_toc = 20
         txtForm = "Training speed: local avg %f fps, global %f fps, loss %f, global step: %d, predict to wait %s"
-        local_max_iter = FLAGS.stop_globalstep
+        local_max_iter = stop_global_step
         
         timer.tic()
         yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-        n = 0
+        n = 1
         while not sess.should_stop():
             n = n + 1
             if n > 0 and n % iters_per_toc == 0:
@@ -134,11 +131,7 @@ def main():
                     txtData = local_avg_fps, global_avg_fps, yolo_loss, global_step_value, timetowait
                     print(txtForm % txtData)
                     
-                    with open(concated_path, 'a+') as log:
-                        log.write("%.4f,%.4f,%.4f,%d,%s\n" % txtData)
-                    
                     timer.tic()
-    
             yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
         
         coord.request_stop()

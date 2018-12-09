@@ -14,7 +14,11 @@ PROFILER_SAVE_STEP = 3600
 
 SUMMARY_SAVE_STEP = 3600
 
-CHECKPOINT_STEP = 3600
+CHECKPOINT_SAVE_STEP = 3600
+
+STOP_GLOBAL_STEP=3600
+
+LOG_DIR = "log_dir"
 #############################################################################
 
 __file__= os.getcwd()

@@ -119,7 +119,7 @@ class Pascal_voc(object):
             pickle.dump(gt_labels, f)
         return gt_labels
 
-# work rarely, run once save in cache
+    # work rarely, run once save in cache
     def load_pascal_annotation(self, index):
         """
         Load image and bounding boxes info from XML file in the PASCAL VOC
@@ -150,7 +150,7 @@ class Pascal_voc(object):
             cls_ind = self.class_to_ind[obj.find('name').text.lower().strip()]
             # cls_ind is the index of the 20 classes
             boxes = [(x2 + x1) / 2.0, (y2 + y1) / 2.0, x2 - x1, y2 - y1]
-            # The (x,y) coordinates represent the center of the box relative to the bounds of the grid cell.So we have cell_size here. So it means the center x and center y will be in the range of cell size, relative to its real position in the image_size
+            
             x_ind = int(boxes[0] * self.cell_size / self.image_size)
             y_ind = int(boxes[1] * self.cell_size / self.image_size)
             if label[y_ind, x_ind, 0] == 1:
@@ -181,6 +181,5 @@ class Pascal_voc(object):
         '''
         image = (image / 255.0) * 2.0 - 1.0
         if flipped:
-            # means first and third dimension read as normal sequence, but second dimension read from right to left. So it is image flipped
             image = image[:, ::-1, :]
         return image
