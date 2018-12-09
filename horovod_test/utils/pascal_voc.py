@@ -51,43 +51,7 @@ class Pascal_voc(object):
         
         return (image, label)
 
-    # def get_batch(self):
-    #     # Define the operators
-    #     # 这个单一的图片好像不是图内的一部分，这个有可能是错的
-    #     (image, label) = self.get_one_image_label_element()
-    #     # print('get one image and label from the file')
-    #
-    #     image_shape = (self.image_size, self.image_size, 3)  # possible value is a int number
-    #
-    #     label_size = (self.cell_size, self.cell_size, 25)  # possible value is 0 or 1
-    #
-    #     processed_queue = tf.FIFOQueue(capacity=int(self.batch_size * 1.5),
-    #                                    shapes=[image_shape, label_size],
-    #                                    dtypes=[tf.float32, tf.float32],
-    #                                    name='processed_queue')
-    #
-    #
-    #     enqueue_processed_op = processed_queue.enqueue([image, label])
-    #     # print('enqueue one image and label to the FIFOQueue')
-    #
-    #     num_enqueue_threads = min(self.num_enqueue_threads, self.gt_labels_length)
-    #
-    #     queue_runner = tf.train.QueueRunner(processed_queue, [enqueue_processed_op] * num_enqueue_threads)
-    #     tf.train.add_queue_runner(queue_runner)
-    #
-    #     (images, labels) = processed_queue.dequeue_many(self.batch_size)
-    #
-    #     labels = tf.Print(labels, data=[processed_queue.size()],
-    #                       message="On machine %d function get_batch, Nb element left, input:" % self.task_index)
-    #
-    #     print('In function get_batch,dequeue_many batchsize')
-    #     # 这个就是流程，只是这个输出应该没有用的阿。这个在一开始就经过了
-    #     return (images, labels)
-
-
     def prepare(self):
-        # timer_prepare = Timer()
-        # timer_prepare.tic()
         start_prepare_time = time.time()
         gt_labels = self.load_labels()
         print()
@@ -195,9 +159,7 @@ class Pascal_voc(object):
             label[y_ind, x_ind, 1:5] = boxes
             #one light up, although dont know why this implementation
             label[y_ind, x_ind, 5 + cls_ind] = 1
-        
         return label, len(objs)
-
 
     def image_read(self, imname, flipped=False):
         '''
