@@ -13,8 +13,7 @@ class YOLONet(object):
         self.image_size = cfg.IMAGE_SIZE
         self.cell_size = cfg.CELL_SIZE
         self.boxes_per_cell = cfg.BOXES_PER_CELL
-        self.output_size = (self.cell_size * self.cell_size) *\
-            (self.num_class + self.boxes_per_cell * 5)
+        self.output_size = (self.cell_size * self.cell_size) * (self.num_class + self.boxes_per_cell * 5)
         self.scale = 1.0 * self.image_size / self.cell_size
         self.boundary1 = self.cell_size * self.cell_size * self.num_class
         self.boundary2 = self.boundary1 +\
