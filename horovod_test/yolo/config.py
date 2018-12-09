@@ -1,31 +1,21 @@
 import os
 from pathlib import Path
-#
-# path and dataset parameter
-#
-
 
 #-----------------Parameters to be changed-----------------------------#
 #############################################################################
-PS_HOSTS  = '172.20.83.210:8897'
 
-WORKER_HOSTS = '172.20.83.210:8898,172.20.83.202:8898'
-
-BATCH_SIZE = 10 
+BATCH_SIZE = 50 
 
 NUM_ENQUEUE_THREADS = 1
 
-MUL_QUEUE_BATCH = 1.3
+MUL_QUEUE_BATCH = 2
 
-PROFILER_SAVE_STEP = 120
+PROFILER_SAVE_STEP = 3600
 
-SUMMARY_SAVE_STEP = 150
+SUMMARY_SAVE_STEP = 3600
 
+CHECKPOINT_STEP = 3600
 #############################################################################
-
-
-
-BS_NT_MUL_PREFIX = "_bs"+str(BATCH_SIZE)+"nt"+str(NUM_ENQUEUE_THREADS)+"mul"+str(MUL_QUEUE_BATCH)+"s"
 
 __file__= os.getcwd()
 DATA_PATH = Path(__file__).parents[0]

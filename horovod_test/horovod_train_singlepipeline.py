@@ -13,12 +13,12 @@ import horovod.tensorflow as hvd
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--watch_gpu', required=True, type=int, help="watch gpu id filled Set it the same as visible gpu id")
+    parser.add_argument('--watch_gpu', default=0, type=int, help="watch gpu id filled Set it the same as visible gpu id")
     parser.add_argument('--debug', default=True, type=bool)
     parser.add_argument('--stop_globalstep', default=1000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--task_index',default=0, type=int)
-    
+   
     prof_save_step = cfg.PROFILER_SAVE_STEP #120
     sum_save_step = cfg.SUMMARY_SAVE_STEP #500
     FLAGS, unparsed = parser.parse_known_args()
@@ -69,9 +69,7 @@ def main():
     
     image_producer = Pascal_voc('train')
     
-    (current_index, image, label) = image_producer.get_one_image_label_element()
-    current_index = tf.Print(current_index, data=[current_index],
-                     message="CURRENT INDEX OF IMAGE IS :")
+    (image, label) = image_producer.get_one_image_label_element()
 
     image_shape = (image_producer.image_size, image_producer.image_size, 3)
 
@@ -90,33 +88,32 @@ def main():
     tf.train.add_queue_runner(queue_runner)
 
     (images, labels) = processed_queue.dequeue_many(image_producer.batch_size)
-    if FLAGS.debug == True:
-        labels = tf.Print(labels, data=[processed_queue.size()],
-                          message="Worker %d get_batch(), BatchSize %d, Queues left:" % (
-                              FLAGS.task_index, cfg.BATCH_SIZE))
+    #if FLAGS.debug == True:
+    #    labels = tf.Print(labels, data=[processed_queue.size()],
+    #                      message="Worker %d get_batch(), BatchSize %d, Queues left:" % (
+    #                          FLAGS.task_index, cfg.BATCH_SIZE))
 
     #########################graph###################################
    
     hvd.init()    
-    config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
+    config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.visible_device_list=str(hvd.local_rank())
     # config.gpu_options.allocator_type = 'BFC'
     # config.gpu_options.per_process_gpu_memory_fraction = 0.8
  
-    with tf.device("/device:GPU:"+str(FLAGS.watch_gpu)):
-        yolo = YOLONet(images, labels)
+    yolo = YOLONet(images, labels)
         
-        global_step = tf.train.get_or_create_global_step()
-        learning_rate = tf.train.exponential_decay(
-            initial_learning_rate, global_step, decay_steps,
-            decay_rate, staircase, name='learning_rate')
+    global_step = tf.train.get_or_create_global_step()
+    learning_rate = tf.train.exponential_decay(
+    initial_learning_rate, global_step, decay_steps,
+    decay_rate, staircase, name='learning_rate')
         #optimizer = tf.train.GradientDescentOptimizer(
         #    learning_rate=learning_rate)
-        optimizer=tf.train.AdagradOptimizer(0.01*hvd.size())
-        optimizer=hvd.DistributedOtimizer(optimizer) 
-        train_op = slim.learning.create_train_op(
-            yolo.total_loss, optimizer, global_step=global_step)
+   
+    optimizer=tf.train.AdagradOptimizer(0.01*hvd.size())
+    optimizer=hvd.DistributedOptimizer(optimizer) 
+    train_op = slim.learning.create_train_op(yolo.total_loss, optimizer, global_step=global_step)
         
     #########################hook#####################################
     
@@ -133,9 +130,9 @@ def main():
         logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=10, formatter=formatter)
         hooks = [hvd.BroadcastGlobalVariablesHook(0),tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook]
     else:
-        hooks = [tf.debug.LocalCLIDebugHook(dump_root="/debug_dir"),tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
+        hooks = [hvd.BroadcastGlobalVariablesHook(0),tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
+       # hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
     proc = start_gpulog(logrootpath, gpulog_name)
-
     #######################train#####################################
     
     print('Start training ...')
