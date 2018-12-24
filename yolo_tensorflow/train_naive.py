@@ -119,8 +119,6 @@ def main():
     
     
     with tf.train.MonitoredTrainingSession(hooks=hooks,config=config) as sess:
-        
-        
         start_global_step_value = sess.run(global_step)
         timer = Timer(start_global_step_value)
         # local_iter = 0
@@ -136,7 +134,6 @@ def main():
         n = 0
         while not sess.should_stop():
             n = n + 1
-            
             if n > 0 and n % iters_per_toc == 0:
                 if n > 0 and n % iters_per_toc == 0:
                     local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)

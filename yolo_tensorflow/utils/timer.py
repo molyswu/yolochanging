@@ -6,9 +6,7 @@ class Timer(object):
     def __init__(self, start_global_step_value):
         self.global_start_time = time.time()
         self.tick_start_time = 0
-        self.total_time = 0.
         self.start_global_step_value = start_global_step_value
-        self.local_diff = 0.
         self.global_diff = 0
         self.remain_time = 0.
 
