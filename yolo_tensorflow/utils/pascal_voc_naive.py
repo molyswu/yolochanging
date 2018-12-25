@@ -7,7 +7,6 @@ import copy
 import yolo.config as cfg
 import time
 
-
 class pascal_voc(object):
 	
 	def __init__(self, phase, rebuild=False):
@@ -28,7 +27,6 @@ class pascal_voc(object):
 		self.prepare()
 	
 	def get_batch(self):
-		
 		images = np.zeros((self.batch_size, self.image_size, self.image_size, 3))
 		labels = np.zeros((self.batch_size, self.cell_size, self.cell_size, 25))
 		

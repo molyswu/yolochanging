@@ -1,5 +1,5 @@
-## YOLO_tensorflow
-
+## YOLO\_tensorflow
+This contains 1. base\_rawinput. 2. threadlevel parallelism inputpipeline 3. debug validation 4. PS communication module distributed training.  
 This is synchronized with Yolo_Tensorflow_InputPipeline
 
 Tensorflow implementation of [YOLO](https://arxiv.org/pdf/1506.02640.pdf), including training and test phase.
