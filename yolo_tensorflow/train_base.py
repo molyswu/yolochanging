@@ -116,7 +116,7 @@ def main():
     config.gpu_options.per_process_gpu_memory_fraction = 0.8   #do not assign all at the begining
     proc = start_gpulog(logrootpath, gpulog_name)
     
-    iters_per_toc = 20
+    iters_per_toc = 50
     #Forgot to put checkpoint, but ehh anyway not use it here
     with tf.train.MonitoredTrainingSession(hooks=hooks,config=config) as sess:
         timer = Timer()
