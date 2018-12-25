@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--watch_gpu', required=True, type=int,
                         help="watch gpu id filled Set it the same as visible gpu id")
     parser.add_argument('--debug', default=False, type=bool)
-    parser.add_argument('--stop_globalstep', default=1200, type=int)
+    parser.add_argument('--stop_globalstep', default=5000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir", type=str)
     parser.add_argument('--task_index', default=0, type=int)
     parser.add_argument('--warm_up_step', default=20, type=int)
@@ -105,7 +105,7 @@ def main():
             print("Global step %d, Loss %f!" % (
                 curvals[global_step], curvals[yolo.total_loss]))
     
-        logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=10, formatter=formatter)
+        logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=100, formatter=formatter)
         hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook]
     else:
         hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
