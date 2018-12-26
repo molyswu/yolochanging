@@ -17,9 +17,9 @@ NUM_ENQUEUE_THREADS = 1
 
 MUL_QUEUE_BATCH = 1.3
 
-PROFILER_SAVE_STEP = 200
+PROFILER_SAVE_STEP = 500
 
-SUMMARY_SAVE_STEP = 250
+SUMMARY_SAVE_STEP = 5000
 
 #############################################################################
 

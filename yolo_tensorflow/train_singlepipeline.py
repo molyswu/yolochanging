@@ -10,7 +10,6 @@ from utils.timer import Timer
 import subprocess
 import time
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--watch_gpu', required=True, type=int, help="watch gpu id filled Set it the same as visible gpu id")
@@ -122,7 +121,8 @@ def main():
         logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=10, formatter=formatter)
         hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), logging_hook, profiler_hook, summary_hook]
     else:
-        hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
+        hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook]
+        #hooks = [tf.train.StopAtStepHook(last_step=FLAGS.stop_globalstep), profiler_hook, summary_hook]
 
     config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
     config.gpu_options.allow_growth = True
