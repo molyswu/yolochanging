@@ -1,7 +1,7 @@
 import os
 import argparse
 import tensorflow as tf
-import yolo.config as cfg
+import yolo.dis_config as cfg
 from yolo.yolo_net import YOLONet
 from utils.pascal_voc import Pascal_voc
 slim = tf.contrib.slim
@@ -16,7 +16,8 @@ def main():
     parser.add_argument('--stop_globalstep', default=2000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--watch_gpu',required=True ,type=int, help="watch gpu id filled Set it the same as visible gpu id")
-    
+    parser.add_argument('--warm_up_step',default = 20, type = int)
+
     profiler_save_steps = cfg.PROFILER_SAVE_STEP
     summary_save_steps = cfg.SUMMARY_SAVE_STEP
     FLAGS, unparsed = parser.parse_known_args()
@@ -145,31 +146,30 @@ def main():
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
     
         start_global_step_value = sess.run(global_step)
-        timer = Timer(start_global_step_value)
+        timer = Timer()
 
         iters_per_toc = 20
-        txtForm = "Training speed: local avg %f fps, global %f fps, loss %f, global step: %d, predict to wait %s"
-        local_max_iter = FLAGS.stop_globalstep - start_global_step_value
+        txtForm = "Training speed:global step %d, local avg %f fps, global %f fps, loss %f"
 
         #run and log
-        timer.tic()
-        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-        n = 1
+        n = 0
         while not sess.should_stop():
             n = n + 1
-            if n > 0 and n % iters_per_toc == 0:
-                if n > 0 and n % iters_per_toc == 0:
-                    local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
-                    timetowait = timer.remain(n, local_max_iter)
-        
-                    txtData = local_avg_fps, global_avg_fps, yolo_loss, global_step_value, timetowait
-                    print(txtForm % txtData)
-                    with open(concated_path, 'a+') as log:
-                        log.write("%.4f,%.4f,%.4f,%d,%s\n" % txtData)
-                    timer.tic()
-            
+            if n==FLAGS.warm_up_step:
+                start_global_step_value = sess.run(global_step)
+                timer.tic(global_restart=True, start_global_step_value = start_global_step_value)
+            if n % iters_per_toc ==0:
+                timer.tic()
+
             yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
-        
+            
+            if n % iters_per_toc == 0:
+                local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
+                txtData = global_step_value, local_avg_fps, global_avg_fps, yolo_loss
+                print(txtForm % txtData)
+                with open(concated_path, 'a+') as log:
+                        log.write("%d,%.4f,%.4f,%.4f\n" % txtData)
+ 
         coord.request_stop()
         coord.join(threads)
     

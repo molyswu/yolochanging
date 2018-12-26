@@ -1,5 +1,5 @@
 import tensorflow as tf
-import yolo.config as cfg
+import yolo.dis_config as cfg
 
 
 ps_hosts = cfg.PS_HOSTS.split(",")
