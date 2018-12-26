@@ -1,5 +1,5 @@
 # Verified a few tests
-
+- I made many times the same mistakes. InputPipeline run and after hundreds of iterations, run out of memory. It is because of profiling and summary which take huge memory. So for good performance, do not use summary hook and small amount of profiling hook
 - I varified the yolo on pascal voc works on corresponding tensorflow
 - Applied inputpipeline and achieve performance improvement on des machine with single GPU pascal, this is so called thread-level parallelism
 - Tried gRPC tensorflow by default communication way on 2 des machines, with one GPU on each. Performance is worse than second
