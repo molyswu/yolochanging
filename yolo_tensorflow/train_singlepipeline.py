@@ -14,7 +14,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--watch_gpu', required=True, type=int, help="watch gpu id filled Set it the same as visible gpu id")
     parser.add_argument('--debug', default=False, type=bool)
-    parser.add_argument('--stop_globalstep', default=1000, type=int)
+    parser.add_argument('--stop_globalstep', default=5000, type=int)
     parser.add_argument('--checkpoint_dir', default="checkpoint_dir",type=str)
     parser.add_argument('--task_index',default=0, type=int)
     parser.add_argument('--warm_up_step',default = 20, type = int)    
