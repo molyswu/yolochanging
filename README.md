@@ -1,5 +1,7 @@
-# Install dataset and environ
+# Branch Readme 
 In this horovod test, base test is fixed with warm-up and good local and global fps  
+
+
 - cd pascalvoc/  
 - bash download.sh  to download dataset(500 MB, sorry I only downlodaed one year data, but it is this big)
 - (For environment, I only used tensorflow-gpu and opencv. If your environment does not work, try this). 
