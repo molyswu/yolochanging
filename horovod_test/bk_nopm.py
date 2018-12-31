@@ -10,7 +10,7 @@ from utils.timer import Timer
 import subprocess
 import time
 import horovod.tensorflow as hvd
-from uuid import getnode as get_mac
+
 # NO GPU watch, because this time it will be 4 gpus
 # stop_global will be read from the config.py
 # No checkpoints, set the checkpoints very big 
@@ -18,20 +18,11 @@ from uuid import getnode as get_mac
 # mpi, all processes one piece of code
 
 def main():
-
-    hvd.init()
     if os.path.exists(cfg.LOG_DIR):
         os.system("rm -rf %s"%cfg.LOG_DIR)  
     tf.logging.set_verbosity(tf.logging.INFO)
-
-    logrootpath = "Horovod_pipe_%d" % hvd.rank() 
-    if not os.path.exists(logrootpath):
-        os.makedirs(logrootpath)
-    fpslog_name = "horovod_pipe"+ "fps_log.txt"
-    concated_path = logrootpath + "/" + fpslog_name
-
-    gpulog_name = "horovod"+"gpu"+"_gpulog.txt"
     
+    hvd.init()
 
     log_dir = cfg.LOG_DIR if hvd.rank()==0 else None  
 
@@ -43,30 +34,11 @@ def main():
     initial_learning_rate = cfg.LEARNING_RATE
     decay_steps = cfg.DECAY_STEPS
     decay_rate = cfg.DECAY_RATE
-    staircase = cfg.STAIRCASE 
-    warm_up_step = 5
+    staircase = cfg.STAIRCASE
     
     ########################dir#######################################
     
-
-    ###########################gpusubprocess##############################
-    def start_gpulog(path, fname):
-        # has to be called before start of training
-        gpuinfo_path = path + "/" + fname
-        with open(gpuinfo_path, 'w'):
-            argument = 'timestamp,count,gpu_name,gpu_bus_id,memory.total,memory.used,utilization.gpu,utilization.memory'
-        try:
-            proc = subprocess.Popen(
-                ['nvidia-smi --format=csv --query-gpu=%s %s %s %s' % (argument, ' -l 1', '-i 0', '-f '+ gpuinfo_path)], shell=True)
-        except KeyboardInterrupt:
-            try:
-                proc.terminate()
-            except OSError:
-               pass
-               proc.wait()
-        return proc
-
-####################pipeline###################################
+    #########################pipeline###################################
     tf.reset_default_graph()
     
     image_producer = Pascal_voc('train')
@@ -133,7 +105,6 @@ def main():
 # or restored from a checkpoint.
     hooks = [hvd.BroadcastGlobalVariablesHook(0), tf.train.StopAtStepHook(last_step=stop_global_step)]
     #######################train#####################################
-    proc= start_gpulog(logrootpath, gpulog_name)
     
     print('Start training ...')
     with tf.train.MonitoredTrainingSession(config=config, hooks=hooks, checkpoint_dir=log_dir) as sess:
@@ -141,36 +112,32 @@ def main():
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
         
-        timer = Timer()
+        timer = Timer(0)
 
-        iters_per_toc = 5
-        txtForm = "Training speed: global step: %d, local avg %f fps, global %f fps, loss %f"
-        n = 0
+        iters_per_toc = 20
+        txtForm = "Training speed: local avg %f fps, global %f fps, loss %f, global step: %d, predict to wait %s"
+        local_max_iter = stop_global_step
+        
+        timer.tic()
+        yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+        n = 1
         while not sess.should_stop():
             n = n + 1
-            if n == warm_up_step:
-                start_global_step_value = sess.run(global_step)
-                timer.tic(global_restart=True, start_global_step_value = start_global_step_value)      
-            if n % iters_per_toc == 0:
-                timer.tic()      
-                    
-            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+            if n > 0 and n % iters_per_toc == 0:
+                if n > 0 and n % iters_per_toc == 0:
+                    local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
+                    timetowait = timer.remain(n, local_max_iter)
             
-            if n% iters_per_toc == 0:
-                local_avg_fps, global_avg_fps = timer.toc(iters_per_toc, global_step_value)
-                txtData = global_step_value, local_avg_fps, global_avg_fps, yolo_loss 
-                print(txtForm % txtData)
-                with open(concated_path, 'a+') as log:
-                    log.write("%d, %.4f, %.4f, %.4f\n" % txtData)
-       
+                    txtData = local_avg_fps, global_avg_fps, yolo_loss, global_step_value, timetowait
+                    print(txtForm % txtData)
+                    
+                    timer.tic()
+            yolo_loss, global_step_value, _ = sess.run([yolo.total_loss, global_step, train_op])
+        
         coord.request_stop()
         coord.join(threads)
         
     print('Done training.')
-    try:
-        proc.terminate()
-    except OSError:
-        print("Kill subprocess failed. Please kill nvidia-smi mannually")
-        pass
+
 if __name__ == '__main__':
     main()
