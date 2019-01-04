@@ -122,7 +122,7 @@ def main():
         
     print('Done training.')
 
-class PerformanceMeasureHook(tf.train.SessionRunHook):
+class PerformanceHook(tf.train.SessionRunHook):
     def __init__(self, every_n_step, global_step):
         self.last_time = time.time()
         self.last_gs = 0
