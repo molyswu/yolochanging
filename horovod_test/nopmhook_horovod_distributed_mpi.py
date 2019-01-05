@@ -20,7 +20,7 @@ import horovod.tensorflow as hvd
 def main():
     if os.path.exists(cfg.LOG_DIR):
         os.system("rm -rf %s"%cfg.LOG_DIR)  
-    tf.logging.set_verbosity(tf.logging.INFO)
+#    tf.logging.set_verbosity(tf.logging.INFO)
     
     hvd.init()
 

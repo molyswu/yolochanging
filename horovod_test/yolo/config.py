@@ -4,11 +4,11 @@ from pathlib import Path
 #-----------------Parameters to be changed-----------------------------#
 #############################################################################
 
-BATCH_SIZE = 50 
+BATCH_SIZE = 70 
 
 NUM_ENQUEUE_THREADS = 4
 
-MUL_QUEUE_BATCH = 4
+MUL_QUEUE_BATCH = 5
 
 PROFILER_SAVE_STEP = 3600
 
