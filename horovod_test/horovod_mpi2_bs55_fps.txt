@@ -1,0 +1,39 @@
+ining speed: local avg 106.736524 fps, global 71.610134 fps, loss 6.625514,global step: 498, predict to wait 0:39:31
+Training speed: local avg 107.574431 fps, global 72.546555 fps, loss 6.500648,global step: 518, predict to wait 0:38:46
+Training speed: local avg 107.572229 fps, global 72.546807 fps, loss 12.758718, global step: 518, predict to wait 0:38:46
+Training speed: local avg 106.428259 fps, global 73.415633 fps, loss 12.494938, global step: 538, predict to wait 0:38:03
+Training speed: local avg 106.423695 fps, global 73.415301 fps, loss 6.370185,global step: 538, predict to wait 0:38:03
+Training speed: local avg 107.141549 fps, global 74.253367 fps, loss 12.236248, global step: 558, predict to wait 0:37:23
+Training speed: local avg 107.142404 fps, global 74.253058 fps, loss 6.241290,global step: 558, predict to wait 0:37:23
+Training speed: local avg 107.105257 fps, global 75.049572 fps, loss 6.126803,global step: 578, predict to wait 0:36:45
+Training speed: local avg 107.100824 fps, global 75.049801 fps, loss 11.976012, global step: 578, predict to wait 0:36:45
+Training speed: local avg 107.532443 fps, global 75.815727 fps, loss 11.733173, global step: 598, predict to wait 0:36:09
+Training speed: local avg 107.525859 fps, global 75.815395 fps, loss 6.008901,global step: 598, predict to wait 0:36:09
+Training speed: local avg 107.467332 fps, global 76.544973 fps, loss 5.906242,global step: 618, predict to wait 0:35:34
+Training speed: local avg 107.462879 fps, global 76.545222 fps, loss 11.496563, global step: 618, predict to wait 0:35:34
+Training speed: local avg 107.834385 fps, global 77.247593 fps, loss 5.801551,global step: 638, predict to wait 0:35:00
+Training speed: local avg 107.824252 fps, global 77.247674 fps, loss 11.246758, global step: 638, predict to wait 0:35:00
+Training speed: local avg 107.232323 fps, global 77.909748 fps, loss 5.706558,global step: 658, predict to wait 0:34:29
+Training speed: local avg 107.233071 fps, global 77.909839 fps, loss 11.020350, global step: 658, predict to wait 0:34:29
+Training speed: local avg 107.399827fps, global 78.546028 fps, loss 10.819875, global step: 678, predict to wait 0:33:58
+Training speed: local avg 107.379893fps, global 78.545620 fps, loss 5.602234, global step: 678, predict to wait 0:33:58
+Training speed: local avg 107.168718fps, global 79.151338 fps, loss 5.516464, global step: 698, predict to wait 0:33:29
+Training speed: local avg 107.157607fps, global 79.151566 fps, loss 10.576073, global step: 698, predict to wait 0:33:29
+Training speed: local avg 106.984369fps, global 79.729097 fps, loss 5.435973, global step: 718, predict to wait 0:33:01
+Training speed: local avg 106.984500fps, global 79.729324 fps, loss 10.371358, global step: 718, predict to wait 0:33:01
+Training speed: local avg 107.244629fps, global 80.287319 fps, loss 5.353013, global step: 738, predict to wait 0:32:33
+Training speed: local avg 107.245781fps, global 80.287562 fps, loss 10.149323, global step: 738, predict to wait 0:32:33
+Training speed: local avg 108.295042fps, global 80.839178 fps, loss 9.991529, global step: 758, predict to wait 0:32:07
+Training speed: local avg 108.293143fps, global 80.838905 fps, loss 5.271985, global step: 758, predict to wait 0:32:07
+Training speed: local avg 107.548295fps, global 81.358303 fps, loss 5.195741, global step: 778, predict to wait 0:31:41
+Training speed: local avg 107.542163fps, global 81.358473 fps, loss 9.810335, global step: 778, predict to wait 0:31:41
+Training speed: local avg 106.459980fps, global 81.841916 fps, loss 5.125901, global step: 798, predict to wait 0:31:16
+Training speed: local avg 106.459309fps, global 81.842081 fps, loss 9.598609, global step: 798, predict to wait 0:31:16
+Training speed: local avg 106.556732fps, global 82.308647 fps, loss 5.067262, global step: 818, predict to wait 0:30:53
+Training speed: local avg 106.560352fps, global 82.308879 fps, loss 9.417893, global step: 818, predict to wait 0:30:53
+Training speed: local avg 107.572525fps, global 82.772809 fps, loss 9.261357, global step: 838, predict to wait 0:30:29
+Training speed: local avg 107.565984fps, global 82.772483 fps, loss 4.996879, global step: 838, predict to wait 0:30:29
+Training speed: local avg 106.441130fps, global 83.204058 fps, loss 9.069829, global step: 858, predict to wait 0:30:06
+Training speed: local avg 106.447102fps, global 83.203821 fps, loss 4.935953, global step: 858, predict to wait 0:30:07
+^CTraining speed: local avg 107.327054 fps, global 83.631996 fps, loss 4.880980, global step: 878, predict to wait 0:29:44
+
