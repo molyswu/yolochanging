@@ -107,7 +107,7 @@ def main():
     #######################train#####################################
     
     print('Start training ...')
-    with tf.train.MonitoredTrainingSession(config=config, hooks=hooks, checkpoint_dir=log_dir) as sess:
+    with tf.train.MonitoredTrainingSession(config=config, hooks=hooks, checkpoint_dir=log_dir, save_checkpoint_steps=3600) as sess:
     
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
